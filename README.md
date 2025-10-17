@@ -6,10 +6,6 @@
 
 A Harry Potter-style invisible cloak effect using computer vision and OpenCV. This project creates a real-time invisibility effect by detecting red-colored objects and replacing them with the background.
 
-## 🎬 Demo
-
-![Invisible Cloak Demo](demo.gif)
-*Put on a red cloak and become invisible!*
 
 ## Features
 
