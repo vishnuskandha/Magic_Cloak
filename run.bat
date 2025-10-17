@@ -15,22 +15,22 @@ echo.
 echo Choose your magical experience:
 echo.
 echo   [1]  Simple Invisible Cloak
-echo       └─ Basic invisibility effect
-echo       └─ Easy to use, no controls
-echo       └─ Perfect for beginners
+echo       - Basic invisibility effect
+echo       - Easy to use, no controls
+echo       - Perfect for beginners
 echo.
 echo   [2]  Advanced Magic Cloak
-echo       └─ Professional controls panel
-echo       └─ Multiple color presets
-echo       └─ Real-time adjustments
-echo       └─ Color picker tool
+echo       - Professional controls panel
+echo       - Multiple color presets
+echo       - Real-time adjustments
+echo       - Color picker tool
 echo.
 echo   [3]  Setup/Install Dependencies
-echo       └─ First-time setup
-echo       └─ Install required packages
+echo       - First-time setup
+echo       - Install required packages
 echo.
 echo   [4]  Show System Information
-echo       └─ Check Python & packages
+echo       - Check Python & packages
 echo.
 echo   [0]  Exit
 echo.
