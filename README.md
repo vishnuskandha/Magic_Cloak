@@ -44,7 +44,7 @@ A Harry Potter-style invisible cloak effect using computer vision and OpenCV. Th
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/vishnuskandha/magic-cloak.git
+   git clone https://github.com/vishnuskandha/magic_cloak.git
    cd magic-cloak
    ```
 
