@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 import time
-from collections import deque
 
 
 class BackgroundAnalyzer:
@@ -252,6 +251,20 @@ def compute_skin_mask_ycrcb(frame_bgr):
     return skin
 
 
+def compute_face_mask(frame_bgr, face_cascade):
+    if face_cascade is None:
+        return np.zeros(frame_bgr.shape[:2], dtype=np.uint8)
+    gray = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(40, 40))
+    face_mask = np.zeros(frame_bgr.shape[:2], dtype=np.uint8)
+    for (x, y, w, h) in faces:
+        cv2.rectangle(face_mask, (x, y), (x + w, y + h), 255, -1)
+    if np.any(face_mask):
+        kernel = np.ones((7, 7), np.uint8)
+        face_mask = cv2.dilate(face_mask, kernel, iterations=1)
+    return face_mask
+
+
 def color_picker_callback(event, x, y, flags, param):
     """Mouse callback for color picking"""
     if event == cv2.EVENT_LBUTTONDOWN:
@@ -314,6 +327,13 @@ def main():
     create_controls()
     detector = CloakDetector()
     bg = BackgroundAnalyzer(alpha=0.02, stability_frames=60, enable_mask_freeze=True)
+    face_cascade = None
+    face_cascade_path = cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+    cascade = cv2.CascadeClassifier(face_cascade_path)
+    if not cascade.empty():
+        face_cascade = cascade
+    else:
+        print("Warning: Face cascade unavailable; face preservation disabled.")
 
     print("Controls: q-quit | r-reset bg | b-freeze bg | g-grab bg | s-save | 0-7 preset | m manual HSV | f face | k skin | c color picker")
     print("Click on your cloak in the main window to auto-detect color!")
@@ -355,6 +375,9 @@ def main():
 
         mask = detector.compute_mask(hsv)
         # Subtract face/skin to avoid hiding the face
+        if preserve_face:
+            face_mask = compute_face_mask(frame, face_cascade)
+            mask = cv2.bitwise_and(mask, cv2.bitwise_not(face_mask))
         if preserve_skin:
             skin_mask = compute_skin_mask_ycrcb(frame)
             mask = cv2.bitwise_and(mask, cv2.bitwise_not(skin_mask))

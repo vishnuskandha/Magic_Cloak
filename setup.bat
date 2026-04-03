@@ -82,7 +82,7 @@ echo.
 echo [SUCCESS] All packages installed successfully!
 echo.
 echo [NEXT STEPS]
-echo  1. Double-click 'run_invisible_cloak.bat' to start
+echo  1. Double-click 'run.bat' to start
 echo  2. Or run: python invisible_cloak.py
 echo.
 echo [REQUIREMENTS FOR BEST RESULTS]
