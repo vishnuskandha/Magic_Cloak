@@ -1,175 +1,137 @@
-# Invisible Cloak Effect
+# Magic Cloak
 
+[![CI](https://github.com/vishnuskandha/Magic_Cloak/actions/workflows/ci.yml/badge.svg)](https://github.com/vishnuskandha/Magic_Cloak/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.7+-blue.svg)](https://python.org)
 [![OpenCV](https://img.shields.io/badge/OpenCV-4.0+-green.svg)](https://opencv.org)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A Harry Potter-style invisible cloak effect using computer vision and OpenCV. This project creates a real-time invisibility effect by detecting red-colored objects and replacing them with the background.
-
+A real-time "invisible cloak" effect built with OpenCV. The program detects a
+brightly colored cloth in the webcam feed and replaces it with the captured
+background, making the person wearing it appear invisible.
 
 ## Features
 
-### **Two Magical Experiences:**
-1. **Simple Invisible Cloak** (`invisible_cloak.py`)
-   - Basic invisibility effect
-   - Easy to use - just run and wear red!
-   - Perfect for beginners
-   
-2. **Advanced Magic Cloak** (`magic.py`)
-   - Professional controls panel
-   - Multiple color presets (Red, Green, Blue, etc.)
-   - Real-time HSV adjustments
-   - Color picker tool
-   - Background capture modes
+Two programs cover different levels of use:
 
-### ✨ **Common Features:**
-- **Real-time invisibility effect** using webcam
-- **Optimized color detection** to avoid false positives with skin tones
-- **Clean, professional code structure** with proper error handling
-- **Cross-platform compatibility** (Windows, macOS, Linux)
-- **One-click launcher** with automatic dependency management
+### 1. Simple Invisible Cloak (`invisible_cloak.py`)
+
+- Captures a clean background (30 frames) at startup.
+- Detects bright red and swaps it for the background in real time.
+- Morphological cleanup for a stable mask.
+- Press **ESC** to exit.
+
+### 2. Advanced Magic Cloak (`magic.py`)
+
+- Live **controls panel** with trackbars for HSV tuning.
+- **8 color presets**: Red, Green, Blue, Yellow, Orange, Purple, Cyan, Magenta.
+- **Color picker** - click on your cloak in the main window to auto-detect its color.
+- **Background modes**: adaptive running-average background and a median static background capture.
+- **Face and skin preservation** to avoid hiding your face.
+- **Keyboard shortcuts**:
+
+| Key | Action |
+|-----|--------|
+| `q` | Quit |
+| `r` | Reset adaptive background |
+| `b` | Toggle background learning freeze |
+| `g` | Grab a clean static background quickly |
+| `G` | Enter static median capture mode (empty the scene first) |
+| `u` | Use captured static background |
+| `y` | Use adaptive background |
+| `s` | Save current frame as `cloak_<timestamp>.png` |
+| `0`-`7` | Select color preset |
+| `m` | Toggle manual HSV mode |
+| `f` | Toggle face preservation |
+| `k` | Toggle skin preservation |
+| `c` | Toggle color picker (click on cloak) |
+
+### Common
+
+- Red HSV ranges are tuned (high saturation/value) to avoid false positives on skin tones.
+- Cross-platform (Windows, macOS, Linux).
 
 ## Requirements
 
 - Python 3.7+
-- OpenCV (`cv2`)
-- NumPy
-- Webcam/Camera
+- OpenCV (`opencv-python>=4.5.0`)
+- NumPy (`numpy>=1.19.0`)
+- A webcam
 
-## Installation
+## Quick Start
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/vishnuskandha/magic_cloak.git
-   cd magic_cloak
-   ```
+### Windows (one-click)
 
-2. **Install dependencies:**
-   ```bash
-   pip install opencv-python numpy
-   ```
+1. Double-click `setup.bat` to install the dependencies (first time only).
+2. Double-click `run.bat`, choose option **1** (Simple) or **2** (Advanced).
 
-3. **Run the program:**
-   ```bash
-   python invisible_cloak.py
-   ```
+### Manual
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the simple version
+python invisible_cloak.py
+
+# Or run the advanced version
+python magic.py
+```
 
 ## How to Use
 
-1. **Run the script** - The program will initialize your camera
-2. **Step out of frame** - Let the program capture a clean background (30 frames)
-3. **Wear something red** - Put on a bright red cloth, shirt, or towel
-4. **Step back into frame** - Watch yourself become invisible!
-5. **Press ESC** to exit
+1. Run one of the scripts - the camera window opens.
+2. Step out of frame so the program captures a clean background.
+3. Put on a bright red cloth (simple version) - or select/click a color (advanced version).
+4. Step back into frame - the cloth disappears.
+5. Exit with **ESC** (simple) or **q** (advanced).
 
 ## How It Works
 
-### The Science Behind the Magic
+1. **Background capture** - records the empty scene (static frame or running average).
+2. **Color detection** - converts to HSV and thresholds the target color.
+3. **Mask cleanup** - morphological open/close and temporal smoothing remove noise.
+4. **Blending** - cloak-colored pixels are replaced by background pixels, frame by frame.
 
-1. **Background Capture**: Records a clean background without any objects
-2. **Color Detection**: Uses HSV color space to detect bright red colors
-3. **Mask Creation**: Creates masks to separate red objects from the rest
-4. **Image Blending**: Replaces red areas with the corresponding background pixels
-5. **Real-time Processing**: Applies the effect frame by frame
-
-### Technical Details
+### HSV ranges (simple red detection)
 
 ```python
-# HSV Color Ranges (optimized to avoid skin detection)
-Lower Red 1: [0, 150, 100]   # Hue: 0-10°, High Saturation & Value
+Lower Red 1: [0, 150, 100]     # hue 0-10, high saturation/value
 Upper Red 1: [10, 255, 255]
-Lower Red 2: [170, 150, 100] # Hue: 170-180°, High Saturation & Value  
-Upper Red 2: [180, 255, 255]
+Lower Red 2: [170, 150, 100]   # hue 170-180 (red wraps around hue)
+Upper Red 2: [179, 255, 255]
 ```
-
-## 🎨 Customization
-
-### Adjust Color Detection
-
-Edit the HSV ranges in the code to detect different colors:
-
-```python
-# For blue cloak
-lower_blue = np.array([100, 150, 100])
-upper_blue = np.array([130, 255, 255])
-```
-
-### Modify Morphological Operations
-
-Adjust the kernel size and iterations for different cloth textures:
-
-```python
-kernel = np.ones((5, 5), np.uint8)  # Larger kernel for smoother results
-```
-
-## Troubleshooting
-
-### Common Issues
-
-| Problem | Solution |
-|---------|----------|
-| **Face gets hidden** | Use brighter red cloth, ensure good lighting |
-| **Cloak not detected** | Check if red is bright enough, adjust HSV ranges |
-| **Camera not working** | Ensure camera permissions, check camera index |
-| **Flickering effect** | Improve lighting conditions, use solid colored background |
-
-### Tips for Best Results
-
-- **Use bright, vibrant red cloth** (not dark or maroon)
-- **Ensure good lighting** - avoid shadows
-- **Use a plain background** for initial capture
-- **Stay still** during background capture
-- **Avoid red makeup or accessories** while testing
 
 ## Project Structure
 
 ```
-magic-cloak/
-├── invisible_cloak.py    # Main application
-├── README.md            # This file
-├── requirements.txt     # Dependencies
-├── LICENSE             # MIT License
-└── demo.gif           # Demo animation (add your own)
+Magic_Cloak/
+├── invisible_cloak.py    # Simple cloak (ESC to exit)
+├── magic.py              # Advanced cloak with controls panel
+├── setup.bat             # Windows dependency installer
+├── run.bat               # Windows launcher menu
+├── requirements.txt      # Python dependencies
+├── CHANGELOG.md          # Release history
+└── LICENSE               # MIT License
 ```
+
+## Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| Face gets hidden | Use a brighter cloth, improve lighting, enable face/skin preservation in `magic.py` |
+| Cloak not detected | Check that the cloth is bright; adjust HSV or use the color picker |
+| Camera not working | Check camera permissions and the device index (line 318 of `magic.py`) |
+| Flickering effect | Improve lighting, use a solid background, stay still during capture |
+
+## Security
+
+This is a local desktop application - webcam frames are processed in memory and
+never transmitted anywhere. See [SECURITY.md](SECURITY.md).
 
 ## Contributing
 
-Contributions are welcome! Here's how you can help:
-
-1. **Fork the repository**
-2. **Create a feature branch**: `git checkout -b feature-name`
-3. **Commit your changes**: `git commit -am 'Add some feature'`
-4. **Push to the branch**: `git push origin feature-name`
-5. **Submit a pull request**
-
-### Ideas for Contributions
-
-- [ ] Add support for multiple colors
-- [ ] Implement GUI controls for HSV adjustment
-- [ ] Add video recording functionality
-- [ ] Create mobile app version
-- [ ] Add different magical effects
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Inspired by Harry Potter's Invisibility Cloak
-- Built using OpenCV computer vision library
-- Thanks to the open-source community
-
-## Author
-
-**Vishnu Skandha**
-- GitHub: [@vishnuskandha](https://github.com/vishnuskandha)
-- Project: [Magic Cloak Effect](https://github.com/vishnuskandha/magic-cloak)
-
----
-
-**Star this repository** if you found it helpful!
-
-**Report bugs** in the [Issues](https://github.com/vishnuskandha/magic-cloak/issues) section
-
-**Suggest features** or improvements
+MIT License - see [LICENSE](LICENSE). Copyright (c) 2025 Vishnu Skandha.
