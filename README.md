@@ -1,5 +1,15 @@
 # Magic Cloak
 
+
+<!-- README polish: repository metadata badges -->
+<p>
+  <a href="https://github.com/vishnuskandha/Magic_Cloak"><img alt="GitHub stars" src="https://img.shields.io/github/stars/vishnuskandha/Magic_Cloak?style=for-the-badge&logo=github&label=Stars"></a>
+  <a href="https://github.com/vishnuskandha/Magic_Cloak/fork"><img alt="GitHub forks" src="https://img.shields.io/github/forks/vishnuskandha/Magic_Cloak?style=for-the-badge&logo=github&label=Forks"></a>
+  <a href="https://github.com/vishnuskandha/Magic_Cloak/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/vishnuskandha/Magic_Cloak?style=for-the-badge&logo=github&label=Issues"></a>
+  <a href="https://github.com/vishnuskandha/Magic_Cloak/commits"><img alt="Last commit" src="https://img.shields.io/github/last-commit/vishnuskandha/Magic_Cloak?style=for-the-badge&logo=git&label=Updated"></a>
+</p>
+<!-- End README polish -->
+
 [![CI](https://github.com/vishnuskandha/Magic_Cloak/actions/workflows/ci.yml/badge.svg)](https://github.com/vishnuskandha/Magic_Cloak/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.7+-blue.svg)](https://python.org)
